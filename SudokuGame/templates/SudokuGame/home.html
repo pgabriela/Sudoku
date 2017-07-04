@@ -1,0 +1,44 @@
+<html>
+    <body>
+        <table style="width: 17%; align: 'center'" border="5px">
+            <form action="{% url 'checkAns' solPk=solPk %}" method="POST">{% csrf_token %}
+        {% for i in quizMatrix %}
+        <tr>
+            {% for j in i %}
+            {% if forloop.counter0|divisibleby:3 %}
+                {% if forloop.parentloop.counter0|divisibleby:3 %}
+                <td style="border-left: solid; border-top: solid; border-color: black;">
+                {% else %}
+                <td style="border-left: solid; border-color: black;">
+                {% endif %}
+            {% else %}
+                {% if forloop.parentloop.counter0|divisibleby:3 %}
+                <td style="border-top: solid; border-color: black;">
+                {% else %}
+                <td>
+                {% endif %}
+            {% endif %}
+                {% if j == '0' %}
+                {% with forloop.parentloop.counter0|stringformat:"i" as x %}
+                    {% with forloop.counter0|stringformat:"i" as y %}
+                    {% with 'c'|add:x|add:'_'|add:y as c %}
+                    {% for field in form %}
+                    {% if field.html_name == c %}
+                    {{ field }}
+                    {% endif %}
+                    {% endfor %}
+                    {% endwith %}
+                    {% endwith %}
+                {% endwith %}
+                {% else %}
+                {{ j }}
+                {% endif %}
+            </td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+        </table>
+        <input type="submit" value="Check Answer" />
+                </form>
+    </body>
+</html>
